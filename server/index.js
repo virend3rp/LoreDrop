@@ -256,6 +256,43 @@ app.patch('/api/newsletter/unsubscribe', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+app.patch('/api/admin/artifacts/:id/set-exhibit', checkAdminKey, async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('UPDATE artifacts SET is_exhibit = FALSE'); // Reset all
+    const result = await pool.query(
+      'UPDATE artifacts SET is_exhibit = TRUE WHERE id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Artifact not found' });
+    }
+
+    res.json({ message: 'Exhibit of the Week set', artifact: result.rows[0] });
+  } catch (err) {
+    console.error('Error setting exhibit:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// Get the current Exhibit of the Week
+app.get('/api/exhibit', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM artifacts WHERE is_exhibit = TRUE AND approved = TRUE LIMIT 1'
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'No exhibit currently set' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error fetching exhibit:', err.message);
+    res.status(500).send('Server error');
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is listening on http://localhost:${PORT}`);
