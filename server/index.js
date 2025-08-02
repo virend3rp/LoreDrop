@@ -277,19 +277,17 @@ app.patch('/api/admin/artifacts/:id/set-exhibit', checkAdminKey, async (req, res
 });
 
 // Get the current Exhibit of the Week
-app.get('/api/exhibit', async (req, res) => {
+app.get('/api/artifacts/featured', async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT * FROM artifacts WHERE is_exhibit = TRUE AND approved = TRUE LIMIT 1'
+      'SELECT * FROM artifacts WHERE is_featured = TRUE LIMIT 1'
     );
-
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'No exhibit currently set' });
+      return res.status(404).json({ message: 'No featured artifact found' });
     }
-
     res.json(result.rows[0]);
   } catch (err) {
-    console.error('Error fetching exhibit:', err.message);
+    console.error('Error fetching featured artifact:', err.message);
     res.status(500).send('Server error');
   }
 });
