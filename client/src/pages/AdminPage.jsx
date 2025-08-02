@@ -31,7 +31,7 @@ const AdminPage = () => {
   const handleSetExhibit = async (id) => {
     try {
       const response = await fetch(`${API_BASE}/admin/artifacts/${id}/set-exhibit`, {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           Authorization: adminKey,
