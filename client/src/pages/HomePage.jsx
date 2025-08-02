@@ -1,15 +1,33 @@
 // src/pages/HomePage.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import FeaturedExhibit from '../components/FeaturedExhibit';
-import NewsletterSignup from '../components/NewsletterSignup'; // 1. Import the new component
-import { artifacts } from '../data/artifacts.js';
+import NewsletterSignup from '../components/NewsletterSignup';
 
 const HomePage = () => {
-  const featuredArtifact = artifacts[0]; 
+  const [artifacts, setArtifacts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchArtifacts = async () => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/artifacts`);
+      const data = await res.json();
+      setArtifacts(data);
+    } catch (err) {
+      console.error('Failed to fetch artifacts:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchArtifacts();
+  }, []);
+
+  const exhibitOfTheWeek = artifacts.find((a) => a.isExhibit);
 
   return (
     <div>
-      <FeaturedExhibit artifact={featuredArtifact} />
+      {exhibitOfTheWeek && <FeaturedExhibit artifact={exhibitOfTheWeek} />}
       
       {/* Curator Section */}
       <div className="container mx-auto p-8">
@@ -21,8 +39,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* 2. Add the Newsletter component at the end */}
-      <NewsletterSignup /> 
+      <NewsletterSignup />
     </div>
   );
 };
