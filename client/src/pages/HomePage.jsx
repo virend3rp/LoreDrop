@@ -9,7 +9,7 @@ const HomePage = () => {
 
   const fetchArtifacts = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/artifacts`);
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/artifacts`);
       const data = await res.json();
       setArtifacts(data);
     } catch (err) {
