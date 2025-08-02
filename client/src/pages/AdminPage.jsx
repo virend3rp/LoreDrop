@@ -28,6 +28,23 @@ const AdminPage = () => {
     }
   };
 
+  const handleSetExhibit = async (id) => {
+    try {
+      const response = await fetch(`${API_BASE}/admin/exhibit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: adminKey,
+        },
+        body: JSON.stringify({ artifactId: id }),
+      });
+      if (!response.ok) throw new Error('Failed to set exhibit.');
+      alert('Exhibit of the week updated.');
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this artifact permanently?')) return;
     try {
@@ -159,6 +176,7 @@ const AdminPage = () => {
                     <button onClick={() => handleToggleApproval(artifact.id, artifact.approved)} className={`text-sm font-bold ${artifact.approved ? 'text-orange-600' : 'text-green-600'}`}>
                       {artifact.approved ? 'Un-approve' : 'Approve'}
                     </button>
+                    <button onClick={() => handleSetExhibit(artifact.id)} className="text-sm text-blue-600 font-bold">Set Exhibit</button>
                     <button onClick={() => handleDelete(artifact.id)} className="text-sm text-red-600 font-bold">Delete</button>
                   </td>
                 </tr>
