@@ -18,7 +18,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(cors({
-  origin: [''], // your deployed frontend
+  origin: ['https://lore-drop.vercel.app/'], // your deployed frontend
   methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
