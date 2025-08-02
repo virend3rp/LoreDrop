@@ -1,0 +1,27 @@
+/* src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700;900&display=swap');
+/* 1. Import Tailwind's core styles */
+@import "tailwindcss";
+
+/* 2. Import External Fonts */
+
+/* 3. Define Theme via CSS Custom Properties */
+@layer theme {
+  :root {
+    /* Colors */
+    --color-gallery-white: #F8F8F8;
+    --color-charcoal: #222222;
+    --color-antique-gold: #D4AF37;
+
+    /* Font Families */
+    --font-family-serif: "Playfair Display", serif;
+    --font-family-sans: "Lato", sans-serif;
+  }
+}
+
+/* 4. Base Body Styles */
+body {
+  background-color: var(--color-gallery-white);
+  color: var(--color-charcoal);
+  font-family: var(--font-family-sans);
+}

@@ -1,0 +1,61 @@
+# === Global ===
+.DS_Store
+Thumbs.db
+*.log
+*.env
+.env.*.local
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === Frontend ===
+client/node_modules/
+client/dist/
+client/.next/
+client/.vite/
+client/.parcel-cache/
+client/build/
+client/.cache/
+client/public/build/
+
+# Frontend IDE stuff
+client/.idea/
+client/.vscode/
+client/.eslintcache
+
+# React testing coverage
+client/coverage/
+
+# === Backend ===
+server/node_modules/
+server/dist/
+server/build/
+
+# Backend build and logs
+server/coverage/
+server/logs/
+server/tmp/
+server/.cache/
+
+# Backend IDE stuff
+server/.idea/
+server/.vscode/
+server/.eslintcache
+
+# === OS/System files ===
+*.swp
+*.swo
+
+# === Database ===
+*.sqlite
+*.db
+*.pgsql
+*.dump
+
+# === Misc ===
+*.tgz
+*.zip
+*.tar
+*.gz
+*.log
