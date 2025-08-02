@@ -5,7 +5,7 @@ const FeaturedExhibit = ({ artifact }) => {
   return (
     <div className="relative w-full h-[60vh] flex items-center justify-center text-center text-white overflow-hidden">
       {/* Background Image */}
-      <img src={artifact.image} alt={artifact.title} className="absolute top-0 left-0 w-full h-full object-cover z-0" />
+      <img src={artifact.image_url} alt={artifact.title} className="absolute top-0 left-0 w-full h-full object-cover z-0" />
       {/* Darkening Overlay */}
       <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10"></div>
       {/* Content */}
