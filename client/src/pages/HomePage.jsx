@@ -23,7 +23,7 @@ const HomePage = () => {
     fetchArtifacts();
   }, []);
 
-  const exhibitOfTheWeek = artifacts.find((a) => a.isExhibit);
+  const exhibitOfTheWeek = artifacts.find((a) => a.is_featured);
 
   return (
     <div>
