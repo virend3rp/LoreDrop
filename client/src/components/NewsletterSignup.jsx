@@ -21,12 +21,12 @@ const NewsletterSignup = () => {
   setLoading(true);
   toast.loading('Subscribing...');
 
-  try {
-    const response = await fetch('http://localhost:5001/api/newsletter/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    });
+try {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/newsletter/subscribe`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
 
     const data = await response.json();
     toast.dismiss();

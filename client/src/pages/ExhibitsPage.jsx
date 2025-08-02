@@ -1,4 +1,3 @@
-// src/pages/ExhibitsPage.jsx
 import React, { useState, useEffect } from 'react';
 import ArtworkCard from '../components/ArtworkCard';
 
@@ -7,10 +6,12 @@ const ExhibitsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     const fetchArtifacts = async () => {
       try {
-        const response = await fetch('http://localhost:5001/api/artifacts');
+        const response = await fetch(`${API_BASE_URL}/api/artifacts`);
         if (!response.ok) throw new Error('Data could not be fetched.');
         const data = await response.json();
         setArtifacts(data);
@@ -22,7 +23,7 @@ const ExhibitsPage = () => {
     };
 
     fetchArtifacts();
-  }, []);
+  }, [API_BASE_URL]);
 
   if (loading) return <div className="text-center p-10">Loading Collection...</div>;
   if (error) return <div className="text-center p-10 text-red-500">Error: {error}</div>;
@@ -38,7 +39,7 @@ const ExhibitsPage = () => {
             key={artifact.id}
             artifact={{
               ...artifact,
-              image: artifact.image_url, // normalize key
+              image: artifact.image_url, // normalize key for the card
             }}
           />
         ))}

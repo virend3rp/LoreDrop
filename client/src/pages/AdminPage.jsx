@@ -1,11 +1,11 @@
-// src/pages/AdminPage.jsx
 import React, { useState, useEffect } from 'react';
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
 
 const AdminPage = () => {
   const [adminKey, setAdminKey] = useState(localStorage.getItem('adminKey') || '');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState('artifacts');
-
   const [artifacts, setArtifacts] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,14 +14,15 @@ const AdminPage = () => {
   const handleToggleApproval = async (id, currentStatus) => {
     const newStatus = !currentStatus;
     const endpoint = newStatus ? 'approve' : 'unapprove';
-
     try {
-      const response = await fetch(`http://localhost:5001/api/admin/artifacts/${id}/${endpoint}`, {
+      const response = await fetch(`${API_BASE}/admin/artifacts/${id}/${endpoint}`, {
         method: 'PATCH',
-        headers: { 'Authorization': adminKey },
+        headers: { Authorization: adminKey },
       });
       if (!response.ok) throw new Error(`Failed to ${endpoint}.`);
-      setArtifacts(artifacts.map(a => a.id === id ? { ...a, approved: newStatus } : a));
+      setArtifacts((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, approved: newStatus } : a))
+      );
     } catch (err) {
       alert(err.message);
     }
@@ -30,12 +31,12 @@ const AdminPage = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this artifact permanently?')) return;
     try {
-      const response = await fetch(`http://localhost:5001/api/admin/artifacts/${id}`, {
+      const response = await fetch(`${API_BASE}/admin/artifacts/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': adminKey },
+        headers: { Authorization: adminKey },
       });
       if (!response.ok) throw new Error('Failed to delete.');
-      setArtifacts(artifacts.filter(a => a.id !== id));
+      setArtifacts((prev) => prev.filter((a) => a.id !== id));
     } catch (err) {
       alert(err.message);
     }
@@ -44,8 +45,8 @@ const AdminPage = () => {
   const fetchAdminArtifacts = async (key) => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5001/api/admin/artifacts', {
-        headers: { 'Authorization': key },
+      const response = await fetch(`${API_BASE}/admin/artifacts`, {
+        headers: { Authorization: key },
       });
       if (!response.ok) throw new Error('Failed to fetch artifacts');
       const data = await response.json();
@@ -60,8 +61,8 @@ const AdminPage = () => {
   const fetchSubscribers = async (key) => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5001/api/admin/subscribers', {
-        headers: { 'Authorization': key },
+      const response = await fetch(`${API_BASE}/admin/subscribers`, {
+        headers: { Authorization: key },
       });
       if (!response.ok) throw new Error('Failed to fetch subscribers');
       const data = await response.json();
@@ -145,7 +146,7 @@ const AdminPage = () => {
               </tr>
             </thead>
             <tbody>
-              {artifacts.map(artifact => (
+              {artifacts.map((artifact) => (
                 <tr key={artifact.id} className="border-b border-black/10">
                   <td className="p-2">{artifact.id}</td>
                   <td className="p-2">{artifact.title}</td>
@@ -167,66 +168,60 @@ const AdminPage = () => {
         </div>
       )}
 
-{activeTab === 'subscribers' && (
-  <div>
-    <div className="flex justify-end mb-4">
-      <button
-        onClick={() => {
-          const headers = ['ID', 'Email', 'Subscribed', 'Subscribed At'];
-          const rows = subscribers.map((sub) => [
-            sub.id,
-            sub.email,
-            sub.is_subscribed ? 'Yes' : 'No',
-            new Date(sub.subscribed_at).toISOString()
-          ]);
-          const csvContent =
-            [headers, ...rows]
-              .map((row) =>
-                row
-                  .map((cell) => `"${String(cell).replace(/"/g, '""')}"`)
-                  .join(',')
-              )
-              .join('\n');
+      {activeTab === 'subscribers' && (
+        <div>
+          <div className="flex justify-end mb-4">
+            <button
+              onClick={() => {
+                const headers = ['ID', 'Email', 'Subscribed', 'Subscribed At'];
+                const rows = subscribers.map((sub) => [
+                  sub.id,
+                  sub.email,
+                  sub.is_subscribed ? 'Yes' : 'No',
+                  new Date(sub.subscribed_at).toISOString()
+                ]);
+                const csvContent = [headers, ...rows]
+                  .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+                  .join('\n');
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'subscribers.csv');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+              className="px-4 py-2 bg-[var(--color-charcoal)] text-white text-sm font-bold hover:bg-[var(--color-antique-gold)] hover:text-[var(--color-charcoal)] transition-colors"
+            >
+              Export as CSV
+            </button>
+          </div>
 
-          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', 'subscribers.csv');
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }}
-        className="px-4 py-2 bg-[var(--color-charcoal)] text-white text-sm font-bold hover:bg-[var(--color-antique-gold)] hover:text-[var(--color-charcoal)] transition-colors"
-      >
-        Export as CSV
-      </button>
-    </div>
-
-    <div className="overflow-x-auto">
-      <table className="w-full text-left">
-        <thead>
-          <tr className="border-b border-black/20">
-            <th className="p-2">ID</th>
-            <th className="p-2">Email</th>
-            <th className="p-2">Subscribed</th>
-            <th className="p-2">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {subscribers.map((sub) => (
-            <tr key={sub.id} className="border-b border-black/10">
-              <td className="p-2">{sub.id}</td>
-              <td className="p-2">{sub.email}</td>
-              <td className="p-2">{sub.is_subscribed ? '✅' : '❌'}</td>
-              <td className="p-2">{new Date(sub.subscribed_at).toLocaleDateString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </div>
-)}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-black/20">
+                  <th className="p-2">ID</th>
+                  <th className="p-2">Email</th>
+                  <th className="p-2">Subscribed</th>
+                  <th className="p-2">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {subscribers.map((sub) => (
+                  <tr key={sub.id} className="border-b border-black/10">
+                    <td className="p-2">{sub.id}</td>
+                    <td className="p-2">{sub.email}</td>
+                    <td className="p-2">{sub.is_subscribed ? '✅' : '❌'}</td>
+                    <td className="p-2">{new Date(sub.subscribed_at).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

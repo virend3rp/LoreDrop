@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const ArtworkDetailPage = () => {
   const { id } = useParams();
   const [artifact, setArtifact] = useState(null);
@@ -11,11 +13,10 @@ const ArtworkDetailPage = () => {
   const [upvotes, setUpvotes] = useState(0);
   const [downvotes, setDownvotes] = useState(0);
 
-  // Fetch artifact data
   const fetchArtifact = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5001/api/artifacts/${id}`);
+      const response = await fetch(`${API_BASE_URL}/api/artifacts/${id}`);
       if (!response.ok) throw new Error(`Artifact with ID ${id} not found.`);
       const data = await response.json();
       setArtifact(data);
@@ -26,11 +27,10 @@ const ArtworkDetailPage = () => {
     }
   };
 
-  // Handle voting
   const handleVote = async (type) => {
     if (!artifact) return;
 
-    const endpoint = `http://localhost:5001/api/artifacts/${artifact.id}/${type === 'up' ? 'upvote' : 'downvote'}`;
+    const endpoint = `${API_BASE_URL}/api/artifacts/${artifact.id}/${type === 'up' ? 'upvote' : 'downvote'}`;
     try {
       setVoteLoading(true);
       const res = await fetch(endpoint, { method: 'POST' });
@@ -48,12 +48,10 @@ const ArtworkDetailPage = () => {
     }
   };
 
-  // Fetch artifact on mount or ID change
   useEffect(() => {
     fetchArtifact();
   }, [id]);
 
-  // Sync vote counts with loaded artifact
   useEffect(() => {
     if (artifact) {
       setUpvotes(artifact.upvotes || 0);
@@ -61,10 +59,8 @@ const ArtworkDetailPage = () => {
     }
   }, [artifact]);
 
-  // Loading state
   if (loading) return <div className="text-center p-10">Loading Artifact...</div>;
 
-  // Error state
   if (error) {
     return (
       <div className="text-center p-10">
@@ -92,7 +88,6 @@ const ArtworkDetailPage = () => {
 
         {/* Right: Details */}
         <div>
-          {/* Title + Voting Row */}
           <div className="flex items-start gap-4">
             <h1 className="font-[var(--font-family-serif)] text-4xl md:text-5xl flex-1">
               {artifact.title}
