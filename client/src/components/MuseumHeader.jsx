@@ -14,13 +14,13 @@ const MuseumHeader = () => {
 
   return (
     <header className="sticky top-0 z-20 bg-[var(--color-gallery-white)]/90 backdrop-blur-sm border-b border-black/10 shadow-sm">
-      <nav className="container mx-auto px-6 py-3 md:py-4 flex justify-between items-center font-[var(--font-family-serif)]">
+      <nav className="container mx-auto px-2 md:px-6 py-3 md:py-4 flex justify-between items-center font-[var(--font-family-serif)]">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2 group">
           <img
             src={logo}
             alt="LoreDrop logo"
-            className="h-10 w-auto transition-transform group-hover:scale-105"
+            className="h-14 w-auto transition-transform group-hover:scale-105"
           />
           <span className="sr-only">LoreDrop</span>
         </Link>
@@ -40,8 +40,6 @@ const MuseumHeader = () => {
             </Link>
           ))}
         </div>
-
-        {/* Optional: Mobile menu toggle could go here */}
       </nav>
     </header>
   );
