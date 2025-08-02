@@ -258,25 +258,21 @@ app.patch('/api/newsletter/unsubscribe', async (req, res) => {
 });
 app.patch('/api/admin/artifacts/:id/set-exhibit', checkAdminKey, async (req, res) => {
   const { id } = req.params;
-  console.log('▶️ PATCH /set-exhibit for ID:', id);
-
   try {
-    await pool.query('UPDATE artifacts SET is_exhibit = FALSE');
+    await pool.query('UPDATE artifacts SET is_featured = FALSE'); // Reset all
     const result = await pool.query(
-      'UPDATE artifacts SET is_exhibit = TRUE WHERE id = $1 RETURNING *',
+      'UPDATE artifacts SET is_featured = TRUE WHERE id = $1 RETURNING *',
       [id]
     );
 
     if (result.rows.length === 0) {
-      console.warn('⚠️ No artifact found for ID:', id);
       return res.status(404).json({ message: 'Artifact not found' });
     }
 
-    console.log('✅ Exhibit set:', result.rows[0]);
     res.json({ message: 'Exhibit of the Week set', artifact: result.rows[0] });
   } catch (err) {
-    console.error('🔥 Error in /set-exhibit:', err.stack);
-    res.status(500).json({ message: 'Server error', error: err.message });
+    console.error('Error setting exhibit:', err.message);
+    res.status(500).send('Server error');
   }
 });
 
