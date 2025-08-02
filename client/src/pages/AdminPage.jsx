@@ -30,16 +30,20 @@ const AdminPage = () => {
 
   const handleSetExhibit = async (id) => {
     try {
-      const response = await fetch(`${API_BASE}/admin/exhibit`, {
+      const response = await fetch(`${API_BASE}/admin/artifacts/${id}/set-exhibit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: adminKey,
         },
-        body: JSON.stringify({ artifactId: id }),
       });
+  
       if (!response.ok) throw new Error('Failed to set exhibit.');
+  
       alert('Exhibit of the week updated.');
+      
+      // Optional: re-fetch artifact list to reflect change
+      fetchArtifacts?.();
     } catch (err) {
       alert(err.message);
     }
