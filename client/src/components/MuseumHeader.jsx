@@ -17,7 +17,7 @@ const MuseumHeader = () => {
 
   return (
   <header
-    className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:backdrop-blur nav-theme-gold nav-surface" // <- pick: nav-theme-gold | nav-theme-blue | nav-theme-ink
+    className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:backdrop-blur nav-theme-ink nav-surface" // <- pick: nav-theme-gold | nav-theme-blue | nav-theme-ink
     style={{
       background: "var(--nav-bg)",
       borderBottom: "1px solid var(--nav-rule)",
