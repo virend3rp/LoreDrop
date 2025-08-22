@@ -1,6 +1,6 @@
 // src/pages/ExhibitsPage.jsx
 import React, { useState, useEffect, useMemo } from "react";
-import { ExhibitCardRetro, ExhibitGrid } from "../components/ExhibitCardRetro"; // <-- use the new component
+import { ExhibitCardRetro, ExhibitGrid } from "../components/ExhibitCardRetro";
 
 const ExhibitsPage = () => {
   const [artifacts, setArtifacts] = useState([]);
@@ -13,7 +13,6 @@ const ExhibitsPage = () => {
     return artifacts.map(a => ({
       id: a.id,
       title: a.title,
-      // use your existing field names
       image: a.image_url,
       year: a.origin_date,          // string in your schema
       platform: a.medium || a.artist, // no platform column; show medium/artist to add context
@@ -77,6 +76,7 @@ const ExhibitsPage = () => {
   if (error) return <div className="text-center p-10 text-red-500">Error: {error}</div>;
 
   return (
+    <SiteBackground>
     <div className="container mx-auto p-6 md:p-8">
       <h1 className="font-[var(--font-family-serif)] text-4xl md:text-5xl border-b border-black/10 pb-4 mb-8">
         The Collection
@@ -94,6 +94,7 @@ const ExhibitsPage = () => {
         ))}
       </ExhibitGrid>
     </div>
+    </SiteBackground>
   );
 };
 
