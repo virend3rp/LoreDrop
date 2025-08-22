@@ -1,5 +1,5 @@
 
-export default function SiteBackground({ children, className = "" }) {
+export default function SiteBackground({ children, className = "",showCenterRule = false,}) {
   return (
     <div className={"min-h-dvh bg-[var(--bg-paper)] " + className}>
       {/* Top & bottom hairline rules (gives print/masthead feel) */}
