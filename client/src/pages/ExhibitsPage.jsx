@@ -1,7 +1,7 @@
 // src/pages/ExhibitsPage.jsx
 import React, { useState, useEffect, useMemo } from "react";
 import { ExhibitCardRetro, ExhibitGrid } from "../components/ExhibitCardRetro";
-import SiteBackground from "@/components/SiteBackground";
+import SiteBackground from "../components/SiteBackground";
 
 const ExhibitsPage = () => {
   const [artifacts, setArtifacts] = useState([]);
