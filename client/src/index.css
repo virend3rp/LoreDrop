@@ -49,7 +49,12 @@
   }
 
   a { color: inherit; text-decoration: none; }
-  ::selection { background: color-mix(in oklab, var(--accent) 25%, white); }
+
+  /* selection with graceful fallback */
+  ::selection { background: rgba(30, 64, 175, 0.2); }
+  @supports (background: color-mix(in oklab, black, white)) {
+    ::selection { background: color-mix(in oklab, var(--accent) 25%, white); }
+  }
 }
 
 /* 4) Components / Utilities */
@@ -65,12 +70,19 @@
     border-bottom: 1px solid var(--rule);
   }
 
-  /* Navbar that sits on paper */
+  /* Navbar base that sits on paper */
   .nav-premium {
     @apply sticky top-0 z-50 backdrop-blur;
-    background: color-mix(in oklab, var(--bg-paper) 90%, white);
+    background: var(--bg-paper); /* fallback */
     border-bottom: 1px solid var(--rule);
   }
+  /* Enhance with color-mix when available */
+  @supports (background: color-mix(in oklab, black, white)) {
+    .nav-premium {
+      background: color-mix(in oklab, var(--bg-paper) 90%, white);
+    }
+  }
+
   .nav-link {
     @apply text-sm font-semibold tracking-wide transition-colors;
     color: var(--ink-soft);
@@ -85,6 +97,7 @@
     @apply rounded-full px-3 py-1.5 transition;
     color: var(--ink);
     border: 1px solid var(--rule);
+    background: transparent;
   }
   .nav-cta:hover { background: white; }
 
@@ -97,9 +110,19 @@
   .card-premium__bar {
     @apply flex items-center justify-between gap-2 px-3 py-2;
     border-bottom: 1px solid var(--rule);
-    background: linear-gradient(to right, color-mix(in oklab, var(--accent) 6%, transparent), transparent);
+    background: linear-gradient(to right, rgba(30, 64, 175, 0.06), transparent);
     color: var(--ink);
   }
+  @supports (background: color-mix(in oklab, black, white)) {
+    .card-premium__bar {
+      background: linear-gradient(
+        to right,
+        color-mix(in oklab, var(--accent) 6%, transparent),
+        transparent
+      );
+    }
+  }
+
   .chip {
     @apply rounded-full px-2 py-0.5 text-xs;
     border: 1px solid var(--rule);
@@ -108,8 +131,14 @@
   }
   .chip--muted {
     background: #f4f6fb;
-    border-color: color-mix(in oklab, var(--rule) 70%, var(--accent) 30%);
-    color: color-mix(in oklab, var(--ink) 80%, var(--accent) 20%);
+    border-color: #dfe6fb;
+    color: #1f2b4a;
+  }
+  @supports (color: color-mix(in oklab, black, white)) {
+    .chip--muted {
+      border-color: color-mix(in oklab, var(--rule) 70%, var(--accent) 30%);
+      color: color-mix(in oklab, var(--ink) 80%, var(--accent) 20%);
+    }
   }
 
   /* Section title */
@@ -123,4 +152,48 @@
 /* 5) Optional: nice container width without wrapping every page */
 @layer utilities {
   .container-premium { @apply mx-auto max-w-7xl px-6 sm:px-8; }
+}
+
+/* 6) Navbar theme presets (switch by adding one of these classes to <header>) */
+@layer components {
+  .nav-theme-gold {
+    --nav-bg: var(--bg-paper);
+    --nav-ink: var(--ink);
+    --nav-rule: var(--rule);
+    --nav-accent: var(--color-antique-gold);
+  }
+  @supports (background: color-mix(in oklab, black, white)) {
+    .nav-theme-gold { --nav-bg: color-mix(in oklab, var(--bg-paper) 92%, white); }
+  }
+
+  .nav-theme-blue {
+    --nav-bg: var(--bg-paper);
+    --nav-ink: var(--ink);
+    --nav-rule: var(--rule);
+    --nav-accent: #1e40af;
+  }
+  @supports (background: color-mix(in oklab, black, white)) {
+    .nav-theme-blue { --nav-bg: color-mix(in oklab, var(--bg-paper) 94%, white); }
+  }
+
+  .nav-theme-ink {
+    --nav-bg: #0f1422;
+    --nav-ink: #e5e7eb;
+    --nav-rule: #1b2333;
+    --nav-accent: #93c5fd;
+  }
+}
+
+/* 7) Helpers that your header can use directly */
+@layer utilities {
+  .nav-surface {
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--nav-rule);
+  }
+  .nav-text { color: var(--nav-ink); }
+  .nav-accent { color: var(--nav-accent); }
+  .nav-underline {
+    height: 2px;
+    background: var(--nav-accent);
+  }
 }
