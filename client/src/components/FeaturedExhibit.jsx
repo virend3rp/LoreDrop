@@ -1,21 +1,29 @@
-// src/components/FeaturedExhibit.jsx
-import React from 'react';
+// src/components/FeaturedExhibitBadge.jsx
+import React from "react";
 
-const FeaturedExhibit = ({ artifact }) => {
+const FeaturedExhibitBadge = ({ artifact }) => {
+  if (!artifact) return null;
+
   return (
-    <div className="relative w-full h-[60vh] flex items-center justify-center text-center text-white overflow-hidden">
-      {/* Background Image */}
-      <img src={artifact.image_url} alt={artifact.title} className="absolute top-0 left-0 w-full h-full object-cover z-0" />
-      {/* Darkening Overlay */}
-      <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10"></div>
-      {/* Content */}
-      <div className="relative z-20 p-4">
-        <h2 className="font-[var(--font-family-serif)] text-lg md:text-xl  tracking-widest uppercase">Exhibit of the Week</h2>
-        <h1 className="font-[var(--font-family-serif)] text-4xl md:text-7xl  mt-2">{artifact.title}</h1>
-        <p className="mt-4 text-lg">{artifact.date}</p>
-      </div>
+    <div className="inline-flex flex-col items-center p-4 border-4 border-black rounded-lg bg-white shadow-lg max-w-[200px]">
+      {/* Small Image */}
+      <img
+        src={artifact.image_url}
+        alt={artifact.title}
+        className="w-24 h-24 object-cover border-2 border-black rounded-full mb-3"
+      />
+
+      {/* Label */}
+      <span className="font-heading text-sm uppercase tracking-wide bg-yellow-300 border-2 border-black px-2 py-1 mb-2">
+        ⭐ Exhibit of the Week
+      </span>
+
+      {/* Artifact Title */}
+      <h3 className="font-heading comic-outline text-lg text-center leading-snug">
+        {artifact.title}
+      </h3>
     </div>
   );
 };
 
-export default FeaturedExhibit;
+export default FeaturedExhibitBadge;

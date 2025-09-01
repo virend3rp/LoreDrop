@@ -1,30 +1,46 @@
 // src/components/ArtworkCard.jsx
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const ArtworkCard = ({ artifact }) => {
   return (
-    <Link to={`/exhibits/${artifact.id}`} className="block group border border-black/10 p-4 transition hover:shadow-lg hover:border-[var(--color-antique-gold)]">
-      <div className="w-full aspect-square overflow-hidden mb-4">
-        <img 
-          src={artifact.image} 
-          alt={artifact.title} 
+    <Link
+      to={`/exhibits/${artifact.id}`}
+      className="
+        group 
+        border-4 border-black rounded-lg overflow-hidden bg-white 
+        transform transition-transform hover:-translate-y-2 hover:shadow-[6px_6px_0px_#000]
+        flex flex-col
+      "
+    >
+      {/* Image */}
+      <div className="w-full aspect-square overflow-hidden border-b-4 border-black">
+        <img
+          src={artifact.image}
+          alt={artifact.title}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
 
-      {/* Title + Votes Inline */}
-      <div className="flex items-start gap-3">
-        {/* Reddit-style Vote Block */}
-        <div className="flex flex-col items-center text-sm font-bold select-none">
-          <span className="text-green-600 text-lg leading-none">▲</span>
-          <span className="text-black text-xs">{artifact.upvotes - artifact.downvotes}</span>
-          <span className="text-red-600 text-lg leading-none">▼</span>
+      {/* Content */}
+      <div className="p-4 flex-1 flex flex-col justify-between">
+        {/* Title + Date */}
+        <div>
+          <h3 className="comic-outline font-heading text-xl mb-1 truncate">
+            {artifact.title}
+          </h3>
+          <p className="curator-script text-sm opacity-80">{artifact.date}</p>
         </div>
 
-        <div>
-          <h3 className="font-[var(--font-family-serif)] text-xl truncate">{artifact.title}</h3>
-          <p className="text-sm opacity-60">{artifact.date}</p>
+        {/* Votes */}
+        <div className="mt-4 flex items-center justify-center gap-6 text-xl font-heading">
+          <div className="flex flex-col items-center select-none">
+            <span className="text-green-600 text-lg leading-none">▲</span>
+            <span className="text-black text-sm">
+              {(artifact.upvotes || 0) - (artifact.downvotes || 0)}
+            </span>
+            <span className="text-red-600 text-lg leading-none">▼</span>
+          </div>
         </div>
       </div>
     </Link>

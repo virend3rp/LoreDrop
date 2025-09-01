@@ -1,27 +1,97 @@
 /* src/index.css */
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700;900&display=swap');
-/* 1. Import Tailwind's core styles */
+
+/* 1. Import Tailwind */
 @import "tailwindcss";
 
-/* 2. Import External Fonts */
+/* 2. Import External Fonts (self-hosted from /public/fonts) */
+@font-face {
+  font-family: 'Asimovian';
+  src: url('/fonts/Asimovian-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'StoryScript';
+  src: url('/fonts/StoryScript-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 /* 3. Define Theme via CSS Custom Properties */
 @layer theme {
   :root {
-    /* Colors */
-    --color-gallery-white: #F8F8F8;
-    --color-charcoal: #222222;
-    --color-antique-gold: #D4AF37;
+    /* Comic Colors */
+    --bg-page: #fff9f1;        /* comic paper */
+    --ink-strong: #111111;     /* bold ink */
+    --ink-soft: #444444;       /* softer ink */
+    --accent-red: #ff1744;     /* pow red */
+    --accent-yellow: #ffd600;  /* zap yellow */
+    --accent-blue: #2979ff;    /* hero blue */
 
     /* Font Families */
-    --font-family-serif: "Playfair Display", serif;
-    --font-family-sans: "Lato", sans-serif;
+    --font-family-heading: 'Asimovian', sans-serif;
+    --font-family-script: 'StoryScript', cursive;
   }
 }
 
 /* 4. Base Body Styles */
 body {
-  background-color: var(--color-gallery-white);
-  color: var(--color-charcoal);
-  font-family: var(--font-family-sans);
+  background-color: var(--bg-page);
+  color: var(--ink-strong);
+  font-family: var(--font-family-heading);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 5. Clean Comic Headings */
+h1, h2, h3 {
+  font-family: var(--font-family-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ink-strong);
+}
+
+/* 6. Script Accent (for curator notes, quotes, etc.) */
+.curator-script {
+  font-family: var(--font-family-script);
+  font-size: 1.25rem;
+  color: var(--accent-red);
+}
+
+/* 7. Comic Panel Utility (for cards, sections) */
+.panel {
+  border: 3px solid var(--ink-strong);
+  border-radius: 0.5rem;
+  background: white;
+  padding: 1rem;
+}
+
+/* 8. Speech Bubble (cleaned, no shadows) */
+.speech-bubble {
+  background: white;
+  border: 3px solid var(--ink-strong);
+  border-radius: 12px;
+  padding: 1rem;
+  font-family: var(--font-family-script);
+  position: relative;
+}
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; left: 30px;
+  border-width: 20px 20px 0;
+  border-style: solid;
+  border-color: var(--ink-strong) transparent transparent transparent;
+}
+
+.comic-outline {
+  color: #fff;
+  -webkit-text-stroke: 2px #000; /* Chrome / Safari */
+  paint-order: stroke fill;
+  text-shadow:
+    2px 2px 0 #000,
+   -2px 2px 0 #000,
+    2px -2px 0 #000,
+   -2px -2px 0 #000; /* Fallback for Firefox */
 }
